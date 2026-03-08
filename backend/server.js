@@ -11,7 +11,7 @@ app.use(express.json())
 
 const filePath = path.join(__dirname, "humores.json")
 
-let registros = JSON.parse(fs.readFileSync("filePath"))
+let registros = JSON.parse(fs.readFileSync(filePath))
 
 app.get("/", (req, res) => {
     res.send("Servidor funcionando!")
