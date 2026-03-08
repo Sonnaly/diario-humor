@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
+<title>Registro de Humor</title>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Como você está hoje?</h1>
+
+<select id="humor">
+<option>feliz</option>
+<option>triste</option>
+<option>cansado</option>
+<option>animado</option>
+</select>
+
+<br><br>
+
+<input id="comentario" placeholder="comentário">
+
+<br><br>
+
+<button onclick="enviarHumor()">Enviar</button>
+
+<h2>Histórico</h2>
+
+<div id="lista"></div>
+
+<script>
+
+function enviarHumor(){
+
+const humor = document.getElementById("humor").value
+const comentario = document.getElementById("comentario").value
+
+fetch("http://localhost:3000/humor",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({
+humor:humor,
+comentario:comentario
+})
+})
+.then(res=>res.json())
+.then(data=>{
+alert("Humor salvo!")
+carregarHumores()
+})
+
+}
+
+const emojis = {
+feliz: "😄",
+triste: "😢",
+cansado: "😴",
+animado: "🤩"
+}
+
+function carregarHumores(){
+
+fetch("http://localhost:3000/humor")
+.then(res => res.json())
+.then(lista => {
+
+const area = document.getElementById("lista")
+
+area.innerHTML = ""
+
+lista.forEach(item => {
+
+area.innerHTML += `
+<div class="registro">
+<div class="data">🕒 ${new Date(item.data).toLocaleString()}</div>
+<div class="humor">${emojis[item.humor]} <b>${item.humor}</b> - ${item.comentario}</div>
+<button onclick="deletarHumor(${item.id})">🗑</button>
+</div>
+`
+
+})
+
+})
+
+}
+
+function deletarHumor(id){
+
+if(!confirm("Tem certeza que deseja apagar este registro?")){
+return
+}
+
+fetch("http://localhost:3000/humor/" + id,{
+method:"DELETE"
+})
+.then(res=>res.json())
+.then(()=>{
+carregarHumores()
+})
+
+}
+
+carregarHumores()
+
+</script>
+</div>
+</body>
+
+</html>
