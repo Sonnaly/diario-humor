@@ -9,7 +9,9 @@ app.use(express.static(path.join(__dirname, "../frontend")))
 
 app.use(express.json())
 
-let registros = JSON.parse(fs.readFileSync("humores.json"))
+const filePath = path.join(__dirname, "humores.json")
+
+let registros = JSON.parse(fs.readFileSync("filePath"))
 
 app.get("/", (req, res) => {
     res.send("Servidor funcionando!")
@@ -26,8 +28,8 @@ app.post("/humor", (req, res) => {
         data: new Date()
     }
     registros.push(novoRegistro)
-    fs.writeFileSync("humores.json", JSON.stringify(registros, null, 2))
-    res.json({status: "salvo"})
+        fs.writeFileSync(filePath, JSON.stringify(registros, null, 2)),    
+        res.json({status: "salvo"})
 })
 
 const PORT = process.env.PORT || 3000;
@@ -41,7 +43,7 @@ app.delete("/humor/:id", (req, res) => {
 const id = Number(req.params.id)
 
 registros = registros.filter(r => r.id !== id)
-fs.writeFileSync("humores.json", JSON.stringify(registros, null, 2))
+fs.writeFileSync(filePath, JSON.stringify(registros, null, 2)),
 res.json({status:"apagado"})
 
 })
