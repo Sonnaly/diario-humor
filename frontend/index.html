@@ -38,7 +38,7 @@ function enviarHumor(){
 const humor = document.getElementById("humor").value
 const comentario = document.getElementById("comentario").value
 
-fetch("http://localhost:3000/humor",{
+fetch("/humor",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"
@@ -56,6 +56,8 @@ carregarHumores()
 
 }
 
+document.getElementById("comentario").value = ""
+
 const emojis = {
 feliz: "😄",
 triste: "😢",
@@ -65,7 +67,7 @@ animado: "🤩"
 
 function carregarHumores(){
 
-fetch("http://localhost:3000/humor")
+fetch("/humor")
 .then(res => res.json())
 .then(lista => {
 
@@ -95,7 +97,7 @@ if(!confirm("Tem certeza que deseja apagar este registro?")){
 return
 }
 
-fetch("http://localhost:3000/humor/" + id,{
+fetch("/humor/" + id,{
 method:"DELETE"
 })
 .then(res=>res.json())
